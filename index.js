@@ -6,11 +6,14 @@ function createWindow () {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      nodeIntegration: true,
+      contextIsolation: false,
     }
   })
 
-  win.loadFile('index.html')
+  win.maximize()
+  win.webContents.openDevTools()
+  win.loadFile('main/index.html')
 }
 
 app.whenReady().then(() => {
