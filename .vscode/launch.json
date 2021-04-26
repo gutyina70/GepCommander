@@ -13,7 +13,8 @@
 			"args": [
 				"."
 			],
-			"outputCapture": "std"
+			"outputCapture": "std",
+			"preLaunchTask": "tsc: build"
 		}
 	]
 }
