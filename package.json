@@ -1,0 +1,15 @@
+{
+  "name": "gepcommander",
+  "version": "1.0.0",
+  "description": "TotalCommander but better",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "electron": "electron ."
+  },
+  "author": "gutyina70",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^12.0.5"
+  }
+}
