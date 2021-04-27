@@ -9,15 +9,21 @@
 </head>
 
 <body>
+
 	<div id="toolbars">
 		toolbar
 	</div>
-	<div id="left-pane">
-		<ul></ul>
+
+	<div class="pane" id="left-pane" tabindex="0">
+		<ul class="items"></ul>
+		<input type="text" class="search-box" placeholder="search" tabindex="-1">
 	</div>
-	<div id="right-pane">
-		<ul></ul>
+
+	<div class="pane" id="right-pane" tabindex="1">
+		<ul class="items"></ul>
+		<input type="text" class="search-box" placeholder="search" tabindex="-1">
 	</div>
+
 	<script>window.$ = window.jQuery = require('jquery');</script>
 	<script>require('./index.js')</script>
 </body>

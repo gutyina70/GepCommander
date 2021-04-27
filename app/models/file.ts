@@ -3,17 +3,17 @@ import path from 'path';
 
 export abstract class FileSystemInfo {
 
-	fullPath: string;
+	public fullPath: string;
 
-	constructor(fullPath: string) {
+	public constructor(fullPath: string) {
 		this.fullPath = fullPath;
 	}
 
-	getParent() {
+	public get parent() {
 		return new DirectoryInfo(path.dirname(this.fullPath));
 	}
 
-	getName() {
+	public get name() {
 		return path.basename(this.fullPath);
 	}
 
@@ -27,29 +27,32 @@ export class FileInfo extends FileSystemInfo {
 
 export class DirectoryInfo extends FileSystemInfo {
 
-	getChildren() {
+	public get children() {
 		const children = fs.readdirSync(this.fullPath);
-		const result: FileSystemInfo[] = [];
+		const items: FileSystemInfo[] = [];
 
 		for (const childName of children) {
 			const childPath = path.join(this.fullPath, childName);
-			const childElement = this.getInfoAsFileOrDirectory(childPath);
+			const childElement = this.infoAsFileOrDirectory(childPath);
 
 			if (childElement) {
-				result.push(childElement);
+				items.push(childElement);
 			}
 		}
 
-		result.sort((a, b) => {
+		this.sortItems(items)
+		return items;
+	}
+
+	private sortItems(items: FileSystemInfo[]) {
+		items.sort((a, b) => {
 			if (a instanceof DirectoryInfo && b instanceof FileInfo) return -1;
 			if (a instanceof FileInfo && b instanceof DirectoryInfo) return 1;
 			return 0;
 		});
-
-		return result;
 	}
 
-	private getInfoAsFileOrDirectory(path: string): (FileInfo | DirectoryInfo | null) {
+	private infoAsFileOrDirectory(path: string): (FileInfo | DirectoryInfo | null) {
 		try {
 			if (fs.lstatSync(path).isDirectory()) {
 				return new DirectoryInfo(path);
