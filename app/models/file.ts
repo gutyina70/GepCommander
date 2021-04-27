@@ -13,6 +13,10 @@ export abstract class FileSystemInfo {
 		return new DirectoryInfo(path.dirname(this.fullPath));
 	}
 
+	getName() {
+		return path.basename(this.fullPath);
+	}
+
 }
 
 export class FileInfo extends FileSystemInfo {
@@ -36,6 +40,12 @@ export class DirectoryInfo extends FileSystemInfo {
 			}
 		}
 
+		result.sort((a, b) => {
+			if (a instanceof DirectoryInfo && b instanceof FileInfo) return -1;
+			if (a instanceof FileInfo && b instanceof DirectoryInfo) return 1;
+			return 0;
+		});
+
 		return result;
 	}
 
@@ -49,7 +59,8 @@ export class DirectoryInfo extends FileSystemInfo {
 			}
 		}
 		catch (error) {
-			console.error(path + ' skipped');
+			// Probably a system file or folder, skip this.
+			// console.error(path + ' skipped');
 			return null;
 		}
 	}

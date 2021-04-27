@@ -10,29 +10,29 @@ $(function () {
 	goToPath(base, rightPane);
 })
 
-function renderItems(items: FileSystemInfo[], container: JQuery) {
+function renderItems(back: DirectoryInfo, children: FileSystemInfo[], container: JQuery) {
 	container.empty();
 
-	for (const item of items) {
+	container.append(createItem(back, '..', () => goToPath(back, container)));
+	for (const item of children) {
 		container.append(
-			$('<li>').append(
-				$('<button>')
-					.html(item.fullPath)
-					.on('click', function () {
-						goToPath(item as DirectoryInfo, container)
-					})
-			)
+			createItem(item, item.getName(), () => goToPath(item as DirectoryInfo, container))
 		);
 	}
 }
 
+function createItem(item: FileSystemInfo, displayName: string, goToDestination: CallableFunction) {
+	return $('<li>').append(
+		$('<img>')
+			.attr('src', item instanceof DirectoryInfo ? './images/folder.png' : './images/file.png')
+			.addClass('icon'),
+		$('<button>')
+			.html(displayName)
+			.on('click', () => goToDestination())
+	);
+}
+
 function goToPath(parent: DirectoryInfo, container: JQuery) {
 	let items = parent.getChildren();
-	try {
-		items.unshift(parent.getParent());
-	}
-	catch (error) {
-		console.log('failed to get parent of ' + parent.fullPath);
-	}
-	renderItems(items, container);
+	renderItems(parent.getParent(), items, container);
 }
