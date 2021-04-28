@@ -1,8 +1,8 @@
-import { leftPane, rightPane } from "./pane";
+import { leftPane, rightPane } from "./pane_renderer";
 
 $(() => {
 
 	leftPane.init();
 	rightPane.init();
 
-})
+});

@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 
 export abstract class FileSystemInfo {
-
 	public fullPath: string;
 
 	public constructor(fullPath: string) {
@@ -16,17 +15,12 @@ export abstract class FileSystemInfo {
 	public get name() {
 		return path.basename(this.fullPath);
 	}
-
 }
 
 export class FileInfo extends FileSystemInfo {
-
-
-
 }
 
 export class DirectoryInfo extends FileSystemInfo {
-
 	public get children() {
 		const children = fs.readdirSync(this.fullPath);
 		const items: FileSystemInfo[] = [];
