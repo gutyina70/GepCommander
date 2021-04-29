@@ -15,6 +15,10 @@ export abstract class FileSystemInfo {
 	public get name() {
 		return path.basename(this.fullPath);
 	}
+
+	public get exists() {
+		return fs.existsSync(this.fullPath);
+	}
 }
 
 export class FileInfo extends FileSystemInfo {

@@ -2,7 +2,7 @@ import { DirectoryInfo } from "./file";
 import { BackItem, Item } from "./item";
 
 export class Pane {
-	private static defaultDirectory: DirectoryInfo = new DirectoryInfo('C://');
+	private static defaultDirectory: DirectoryInfo = new DirectoryInfo('C:/');
 
 	private _back: BackItem = new BackItem(Pane.defaultDirectory);
 
@@ -26,13 +26,22 @@ export class Pane {
 		return this.shownItems.findIndex(item => item == this.selectedItem);
 	}
 
+	public shouldUpdateRenderTree = true;
 	public searchTerm: string = '';
 
 	public constructor() {
 		this.goTo(this.path);
 	}
 
+	public tryGoTo(path: string) {
+		const dirPath = new DirectoryInfo(path);
+		if (dirPath.exists) {
+			this.goTo(dirPath);
+		}
+	}
+
 	public goTo(path: DirectoryInfo) {
+		this.shouldUpdateRenderTree = true;
 		this.path = path;
 		this.items = [this.back];
 		for (const child of this.path.children) {
@@ -41,7 +50,14 @@ export class Pane {
 	}
 
 	public goBack() {
+		const oldPath = this.path;
 		this.goTo(this.back.info as DirectoryInfo);
+		for (const item of this.items) {
+			if (item.info.fullPath == oldPath.fullPath) {
+				this.select(item);
+				return;
+			}
+		}
 	}
 
 	public update() {

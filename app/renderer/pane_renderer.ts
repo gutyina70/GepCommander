@@ -9,10 +9,13 @@ export class PaneRenderer {
 
 	public container: JQuery;
 	public get itemsContainer() {
-		return this.container.children('.items');
+		return this.container.find('.items');
 	}
 	public get searchBox() {
-		return this.container.children('.search-box');
+		return this.container.find('.search-box');
+	}
+	public get pathBox() {
+		return this.container.find('.path')
 	}
 
 	constructor(container: JQuery) {
@@ -21,59 +24,33 @@ export class PaneRenderer {
 
 	public init() {
 		this.container
-			.on('keydown', e => this.onKeyDown(e))
-			.on('keyup', e => this.onKeyUp(e))
-			.on('click', e => this.onClick(e));
+			.on('keydown', e => this.onContainerKeyDown(e))
+			.on('click', e => this.onContainerClick(e));
+		this.pathBox
+			.on('keydown', e => this.onPathBoxChanged(e))
+			.on('keyup', e => this.onPathBoxChanged(e));
+		this.searchBox
+			.on('keydown', e => this.onSearchBoxChanged(e))
+			.on('keyup', e => this.onSearchBoxChanged(e));
 		this.render();
 	}
 
-	private onKeyDown(e: JQuery.KeyDownEvent): void {
-		if (e.shiftKey) {
+	private onContainerKeyDown(e: JQuery.KeyboardEventBase) {
+		if (e.ctrlKey && e.code == 'KeyL') {
+			this.pathBox.focus();
+			this.pathBox.select();
+		}
+		else if (e.shiftKey) {
 			this.handleMarking(e);
 		}
-		else {
+		else if (!e.shiftKey && !e.ctrlKey) {
 			this.handleSelectionAndSearchBox(e);
 		}
-		this.updateSearchData();
+
 		this.render();
 	}
 
-	private handleSelectionAndSearchBox(e: JQuery.KeyDownEvent) {
-		switch (e.code) {
-			case 'ArrowUp':
-				this.pane.selectPrev();
-				break;
-			case 'ArrowDown':
-				this.pane.selectNext();
-				break;
-			case 'Home':
-				this.pane.selectFirst();
-				break;
-			case 'End':
-				this.pane.selectLast();
-				break;
-			case 'Escape':
-				this.container.focus();
-				this.searchBox.val('');
-				break;
-			case 'Enter':
-				this.pane.openSelected();
-				this.searchBox.val('');
-				break;
-			case 'Backspace':
-				if (!this.searchBox.is(':focus')) {
-					this.pane.goBack();
-				}
-				break;
-			case 'ControlLeft':
-			case 'ControlRight':
-				break;
-			default:
-				this.searchBox.focus();
-		}
-	}
-
-	private handleMarking(e: JQuery.KeyDownEvent) {
+	private handleMarking(e: JQuery.KeyboardEventBase) {
 		switch (e.code) {
 			case 'ArrowUp':
 				this.pane.markPrev();
@@ -90,8 +67,70 @@ export class PaneRenderer {
 		}
 	}
 
-	private onKeyUp(e: JQuery.KeyUpEvent) {
+	private handleSelectionAndSearchBox(e: JQuery.KeyboardEventBase) {
+		switch (e.code) {
+			case 'ArrowUp':
+				this.pane.selectPrev();
+				break;
+			case 'ArrowDown':
+				this.pane.selectNext();
+				break;
+			case 'Home':
+				this.pane.selectFirst();
+				break;
+			case 'End':
+				this.pane.selectLast();
+				break;
+			case 'Enter':
+				this.searchBox.val('');
+				this.updateSearchData();
+				this.pane.openSelected();
+				break;
+			case 'Backspace':
+				this.pane.goBack();
+				break;
+			default:
+				this.searchBox.focus();
+		}
+	}
+
+	private onPathBoxChanged(e: JQuery.KeyboardEventBase) {
+		this.pane.tryGoTo(this.pathBox.val() as string);
+		switch (e.code) {
+			case 'Escape':
+			case 'Enter':
+				this.container.focus();
+				break;
+			case 'ArrowUp':
+			case 'ArrowDown':
+				return;
+		}
+		this.pane.tryGoTo(this.pathBox.val() as string);
+		this.render();
+		e.stopPropagation();
+	}
+
+	private onSearchBoxChanged(e: JQuery.KeyboardEventBase) {
+		this.pane.shouldUpdateRenderTree = true;
+		switch (e.code) {
+			case 'Escape':
+				this.container.focus();
+				this.searchBox.val('');
+				break;
+			case 'ArrowUp':
+			case 'ArrowDown':
+			case 'Enter':
+				return;
+		}
 		this.updateSearchData();
+		this.render();
+		e.stopPropagation();
+	}
+
+	private onContainerClick(e: JQuery.ClickEvent) {
+		if (e.ctrlKey) {
+			this.pane.markSelected();
+		}
 		this.render();
 	}
 
@@ -99,22 +138,18 @@ export class PaneRenderer {
 		this.pane.searchTerm = this.searchBox.val() as string;
 	}
 
-	private onClick(e: JQuery.ClickEvent) {
-		if (e.ctrlKey) {
-			this.pane.markSelected();
-		}
-		this.render();
-	}
-
-
 	public render() {
 		this.pane.update();
+		if (!this.pathBox.is(':focus')) {
+			this.pathBox.val(this.pane.path.fullPath);
+		}
 
-		if (this.pane.shownItems.length === this.itemRenderers.length) {
-			this.updateItemRenderers()
+		if (this.pane.shouldUpdateRenderTree) {
+			this.pane.shouldUpdateRenderTree = false;
+			this.recreateItemRenderers();
 		}
 		else {
-			this.recreateItemRenderers();
+			this.updateItemRenderers()
 		}
 	}
 
@@ -144,6 +179,7 @@ export class PaneRenderer {
 	private getOpenAction(item: Item) {
 		return () => {
 			this.pane.open(item);
+			this.pathBox.val(this.pane.path.fullPath);
 			this.render();
 		};
 	}
