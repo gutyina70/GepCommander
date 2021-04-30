@@ -1,10 +1,14 @@
 {
 	"files.exclude": {
 		"**/*.js": {
-			"when": "$(basename).ts"
+			"when": "$(basename).ts",
 		},
 		"**/**.js": {
-			"when": "$(basename).tsx"
-		}
-	}
+			"when": "$(basename).tsx",
+		},
+	},
+	"typescript.updateImportsOnFileMove.enabled": "always",
+	"typescript.format.insertSpaceAfterKeywordsInControlFlowStatements": false,
+	"typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+	"typescript.format.placeOpenBraceOnNewLineForFunctions": true,
 }

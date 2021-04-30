@@ -2,27 +2,33 @@ import { Item } from "../models/item";
 import { Pane } from "../models/pane";
 import { ItemRenderer } from "./item_renderer";
 
-export class PaneRenderer {
+export class PaneRenderer
+{
 	public pane: Pane = new Pane();
 
 	public itemRenderers: ItemRenderer[] = [];
 
 	public container: JQuery;
-	public get itemsContainer() {
+	public get itemsContainer()
+	{
 		return this.container.find('.items');
 	}
-	public get searchBox() {
+	public get searchBox()
+	{
 		return this.container.find('.search-box');
 	}
-	public get pathBox() {
+	public get pathBox()
+	{
 		return this.container.find('.path')
 	}
 
-	constructor(container: JQuery) {
+	constructor(container: JQuery)
+	{
 		this.container = container;
 	}
 
-	public init() {
+	public init()
+	{
 		this.container
 			.on('keydown', e => this.onContainerKeyDown(e))
 			.on('click', e => this.onContainerClick(e));
@@ -35,23 +41,29 @@ export class PaneRenderer {
 		this.render();
 	}
 
-	private onContainerKeyDown(e: JQuery.KeyboardEventBase) {
-		if (e.ctrlKey && e.code == 'KeyL') {
+	private onContainerKeyDown(e: JQuery.KeyboardEventBase)
+	{
+		if(e.ctrlKey && e.code == 'KeyL')
+		{
 			this.pathBox.focus();
 			this.pathBox.select();
 		}
-		else if (e.shiftKey) {
+		else if(e.shiftKey)
+		{
 			this.handleMarking(e);
 		}
-		else if (!e.shiftKey && !e.ctrlKey) {
+		else if(!e.shiftKey && !e.ctrlKey)
+		{
 			this.handleSelectionAndSearchBox(e);
 		}
 
 		this.render();
 	}
 
-	private handleMarking(e: JQuery.KeyboardEventBase) {
-		switch (e.code) {
+	private handleMarking(e: JQuery.KeyboardEventBase)
+	{
+		switch(e.code)
+		{
 			case 'ArrowUp':
 				this.pane.markPrev();
 				break;
@@ -67,8 +79,10 @@ export class PaneRenderer {
 		}
 	}
 
-	private handleSelectionAndSearchBox(e: JQuery.KeyboardEventBase) {
-		switch (e.code) {
+	private handleSelectionAndSearchBox(e: JQuery.KeyboardEventBase)
+	{
+		switch(e.code)
+		{
 			case 'ArrowUp':
 				this.pane.selectPrev();
 				break;
@@ -94,9 +108,11 @@ export class PaneRenderer {
 		}
 	}
 
-	private onPathBoxChanged(e: JQuery.KeyboardEventBase) {
+	private onPathBoxChanged(e: JQuery.KeyboardEventBase)
+	{
 		this.pane.tryGoTo(this.pathBox.val() as string);
-		switch (e.code) {
+		switch(e.code)
+		{
 			case 'Escape':
 			case 'Enter':
 				this.container.focus();
@@ -110,9 +126,11 @@ export class PaneRenderer {
 		e.stopPropagation();
 	}
 
-	private onSearchBoxChanged(e: JQuery.KeyboardEventBase) {
+	private onSearchBoxChanged(e: JQuery.KeyboardEventBase)
+	{
 		this.pane.shouldUpdateRenderTree = true;
-		switch (e.code) {
+		switch(e.code)
+		{
 			case 'Escape':
 				this.container.focus();
 				this.searchBox.val('');
@@ -127,65 +145,81 @@ export class PaneRenderer {
 		e.stopPropagation();
 	}
 
-	private onContainerClick(e: JQuery.ClickEvent) {
-		if (e.ctrlKey) {
+	private onContainerClick(e: JQuery.ClickEvent)
+	{
+		if(e.ctrlKey)
+		{
 			this.pane.markSelected();
 		}
 		this.render();
 	}
 
-	private updateSearchData() {
+	private updateSearchData()
+	{
 		this.pane.searchTerm = this.searchBox.val() as string;
 	}
 
-	public render() {
+	public render()
+	{
 		this.pane.update();
-		if (!this.pathBox.is(':focus')) {
+		if(!this.pathBox.is(':focus'))
+		{
 			this.pathBox.val(this.pane.path.fullPath);
 		}
 
-		if (this.pane.shouldUpdateRenderTree) {
+		if(this.pane.shouldUpdateRenderTree)
+		{
 			this.pane.shouldUpdateRenderTree = false;
 			this.recreateItemRenderers();
 		}
-		else {
+		else
+		{
 			this.updateItemRenderers()
 		}
 	}
 
-	private updateItemRenderers() {
-		for (const renderer of this.itemRenderers) {
+	private updateItemRenderers()
+	{
+		for(const renderer of this.itemRenderers)
+		{
 			renderer.updateElement();
 		}
 	}
 
-	private recreateItemRenderers() {
+	private recreateItemRenderers()
+	{
 		this.itemRenderers = [];
 		this.itemsContainer.empty();
 
-		for (const item of this.pane.shownItems) {
+		for(const item of this.pane.shownItems)
+		{
 			const renderer = this.getItemElement(item);
 			this.itemRenderers.push(renderer);
 			this.itemsContainer.append(renderer.container);
 		}
 	}
 
-	private getItemElement(item: Item) {
+	private getItemElement(item: Item)
+	{
 		return new ItemRenderer(item,
 			this.getOpenAction(item),
 			this.getSelectAction(item));
 	}
 
-	private getOpenAction(item: Item) {
-		return () => {
+	private getOpenAction(item: Item)
+	{
+		return () =>
+		{
 			this.pane.open(item);
 			this.pathBox.val(this.pane.path.fullPath);
 			this.render();
 		};
 	}
 
-	private getSelectAction(item: Item) {
-		return () => {
+	private getSelectAction(item: Item)
+	{
+		return () =>
+		{
 			this.pane.select(item);
 			this.render();
 		};

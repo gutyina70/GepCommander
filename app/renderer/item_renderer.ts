@@ -1,14 +1,16 @@
 import { DirectoryInfo } from "../models/file";
 import { Item } from "../models/item";
 
-export class ItemRenderer {
+export class ItemRenderer
+{
 	public item: Item;
 	public onOpen: () => void;
 	public onSelect: () => void;
 
 	public container: JQuery;
 
-	constructor(item: Item, onOpen: () => void, onSelect: () => void) {
+	constructor(item: Item, onOpen: () => void, onSelect: () => void)
+	{
 		this.item = item;
 		this.onOpen = onOpen;
 		this.onSelect = onSelect;
@@ -16,7 +18,8 @@ export class ItemRenderer {
 		this.updateElement();
 	}
 
-	private generateElement() {
+	private generateElement()
+	{
 		return $('<tr>')
 			.append(
 				$('<td>').append(
@@ -31,7 +34,8 @@ export class ItemRenderer {
 			.on('dblclick', this.onOpen);
 	}
 
-	public updateElement() {
+	public updateElement()
+	{
 		const iconPath = this.item.info instanceof DirectoryInfo ?
 			'./images/folder.png' : './images/file.png';
 		this.container.find('td img').attr('src', iconPath);
