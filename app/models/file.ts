@@ -1,18 +1,34 @@
 import fs from 'fs';
+import * as nodeDiskInfo from 'node-disk-info';
 import path from 'path';
 
 export abstract class FileSystemInfo
 {
-	public fullPath: string;
+	private _fullPath: string = '';
+
+	public get fullPath()
+	{
+		return this._fullPath;
+	}
+
+	public set fullPath(value)
+	{
+		this._fullPath = value.replace('/', '\\');
+	}
 
 	public constructor(fullPath: string)
 	{
 		this.fullPath = fullPath;
 	}
 
-	public get parent()
+	public get parent(): (DirectoryInfo | null)
 	{
 		return new DirectoryInfo(path.dirname(this.fullPath));
+	}
+
+	public get exists()
+	{
+		return fs.existsSync(this.fullPath);
 	}
 
 	public get name()
@@ -20,9 +36,9 @@ export abstract class FileSystemInfo
 		return path.basename(this.fullPath);
 	}
 
-	public get exists()
+	public equals(other: FileSystemInfo)
 	{
-		return fs.existsSync(this.fullPath);
+		return this.fullPath === other.fullPath;
 	}
 }
 
@@ -32,24 +48,60 @@ export class FileInfo extends FileSystemInfo
 
 export class DirectoryInfo extends FileSystemInfo
 {
+	public constructor(fullPath: string)
+	{
+		if(fullPath.endsWith(':'))
+		{
+			fullPath += '\\';
+		}
+		super(fullPath);
+	}
+
 	public get children()
 	{
-		const children = fs.readdirSync(this.fullPath);
-		const items: FileSystemInfo[] = [];
+		let infos: FileSystemInfo[];
+		if(this.equals(DirectoryInfo.root))
+		{
+			infos = this.getDriveInfos();
+		}
+		else
+		{
+			infos = this.getChildrenDirectoryInfos();
+		}
+		this.sortItems(infos)
+		return infos;
+	}
 
+	private getChildrenDirectoryInfos()
+	{
+		const infos: FileSystemInfo[] = [];
+		const children = fs.readdirSync(this.fullPath);
 		for(const childName of children)
 		{
 			const childPath = path.join(this.fullPath, childName);
-			const childElement = this.infoAsFileOrDirectory(childPath);
+			const childInfo = this.infoAsFileOrDirectory(childPath);
 
-			if(childElement)
+			if(childInfo)
 			{
-				items.push(childElement);
+				infos.push(childInfo);
 			}
 		}
+		return infos;
+	}
 
-		this.sortItems(items)
-		return items;
+	private getDriveInfos()
+	{
+		const infos: FileSystemInfo[] = [];
+		const drives = nodeDiskInfo.getDiskInfoSync();
+		for(const drive of drives)
+		{
+			const info = new DirectoryInfo(drive.mounted);
+			if(info.exists)
+			{
+				infos.push(info);
+			}
+		}
+		return infos;
 	}
 
 	private sortItems(items: FileSystemInfo[])
@@ -81,5 +133,42 @@ export class DirectoryInfo extends FileSystemInfo
 			// console.error(path + ' skipped');
 			return null;
 		}
+	}
+
+	public get parent()
+	{
+		if(this.equals(DirectoryInfo.root))
+		{
+			return null;
+		}
+		if(this.isDriveRoot)
+		{
+			return DirectoryInfo.root;
+		}
+		return super.parent;
+	}
+
+	public get name()
+	{
+		if(this.isDriveRoot)
+		{
+			return this.drive;
+		}
+		return super.name;
+	}
+
+	private get drive()
+	{
+		return this.fullPath.split(':')[0];
+	}
+
+	private get isDriveRoot()
+	{
+		return this.fullPath.endsWith(':\\');
+	}
+
+	private static get root()
+	{
+		return new DirectoryInfo('\\');
 	}
 }

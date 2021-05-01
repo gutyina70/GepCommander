@@ -5,19 +5,23 @@ export class Pane
 {
 	private static defaultDirectory: DirectoryInfo = new DirectoryInfo('C:/');
 
-	private _back: BackItem = new BackItem(Pane.defaultDirectory);
-
 	public path: DirectoryInfo = Pane.defaultDirectory;
 	public items: Item[] = [];
+
 	public get back()
 	{
-		this._back.info = this.path.parent;
-		return this._back;
+		if(!this.path.parent)
+		{
+			return null;
+		}
+		return new BackItem(this.path.parent);
 	}
+
 	public get shownItems()
 	{
 		return this.items.filter(item => item.shown);
 	}
+
 	public get selectedItem()
 	{
 		const selecteds = this.items.filter(item => item.selected);
@@ -27,6 +31,7 @@ export class Pane
 		}
 		return null;
 	}
+
 	public get selectedIndex()
 	{
 		return this.shownItems.findIndex(item => item == this.selectedItem);
@@ -40,12 +45,11 @@ export class Pane
 		this.goTo(this.path);
 	}
 
-	public tryGoTo(path: string)
+	public tryGoTo(path: DirectoryInfo)
 	{
-		const dirPath = new DirectoryInfo(path);
-		if(dirPath.exists)
+		if(path.exists)
 		{
-			this.goTo(dirPath);
+			this.goTo(path);
 		}
 	}
 
@@ -53,7 +57,11 @@ export class Pane
 	{
 		this.shouldUpdateRenderTree = true;
 		this.path = path;
-		this.items = [this.back];
+		this.items = [];
+		if(this.back)
+		{
+			this.items.push(this.back);
+		}
 		for(const child of this.path.children)
 		{
 			this.items.push(new Item(child));
@@ -62,6 +70,10 @@ export class Pane
 
 	public goBack()
 	{
+		if(!this.back)
+		{
+			return;
+		}
 		const oldPath = this.path;
 		this.goTo(this.back.info as DirectoryInfo);
 		for(const item of this.items)

@@ -1,3 +1,4 @@
+import { DirectoryInfo } from "../models/file";
 import { Item } from "../models/item";
 import { Pane } from "../models/pane";
 import { ItemRenderer } from "./item_renderer";
@@ -110,7 +111,6 @@ export class PaneRenderer
 
 	private onPathBoxChanged(e: JQuery.KeyboardEventBase)
 	{
-		this.pane.tryGoTo(this.pathBox.val() as string);
 		switch(e.code)
 		{
 			case 'Escape':
@@ -121,7 +121,7 @@ export class PaneRenderer
 			case 'ArrowDown':
 				return;
 		}
-		this.pane.tryGoTo(this.pathBox.val() as string);
+		this.pane.tryGoTo(new DirectoryInfo(this.pathBox.val() as string));
 		this.render();
 		e.stopPropagation();
 	}
