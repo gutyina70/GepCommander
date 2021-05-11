@@ -1,17 +1,63 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "typescript",
-			"tsconfig": "tsconfig.json",
-			"problemMatcher": [
-				"$tsc"
-			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"label": "tsc: build"
-		}
-	],
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Electron",
+      "type": "shell",
+      "command": "npm run electron:serve-tsc",
+      "isBackground": false,
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": {
+        "owner": "typescript",
+        "source": "ts",
+        "applyTo": "closedDocuments",
+        "fileLocation": [
+          "relative",
+          "${cwd}"
+        ],
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*",
+          "endsPattern": "^.*Terminal will be reused by tasks, press any key to close it.*"
+        }
+      }
+    },
+    {
+      "label": "Angular",
+      "type": "shell",
+      "command": "npm run ng:serve",
+      "isBackground": true,
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": {
+        "owner": "typescript",
+        "source": "ts",
+        "applyTo": "closedDocuments",
+        "fileLocation": [
+          "relative",
+          "${cwd}"
+        ],
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*",
+          "endsPattern": "^.*Compiled successfully.*"
+        }
+      }
+    },
+    {
+      "label": "Build",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Angular",
+        "Electron"
+      ]
+    }
+  ],
 }

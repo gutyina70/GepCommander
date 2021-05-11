@@ -1,0 +1,12 @@
+<div #paneContainer tabindex="{{ tabindex }}">
+	<app-pane-path #path [paneComponent]="this" [pane]="pane">
+	</app-pane-path>
+	<ul>
+		<li *ngFor="let item of pane.shownItems">
+			<app-pane-item [item]="item" [pane]="pane">
+			</app-pane-item>
+		</li>
+	</ul>
+	<app-pane-search #search [paneComponent]="this" [pane]="pane">
+	</app-pane-search>
+</div>

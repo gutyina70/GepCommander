@@ -6,9 +6,14 @@
 		"**/**.js": {
 			"when": "$(basename).tsx",
 		},
+		"**/*.js.map": {},
+		"**/**.spec.ts": true,
 	},
 	"typescript.updateImportsOnFileMove.enabled": "always",
 	"typescript.format.insertSpaceAfterKeywordsInControlFlowStatements": false,
 	"typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
 	"typescript.format.placeOpenBraceOnNewLineForFunctions": true,
+	"js/ts.implicitProjectConfig.experimentalDecorators": true,
+	"editor.tabSize": 2,
+	"editor.insertSpaces": true
 }
