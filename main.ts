@@ -2,6 +2,14 @@ import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
+const platform = process.platform
+if(platform != 'win32' && platform != 'linux')
+{
+  console.log(`Unsupported OS: ${platform}`);
+  process.exit(1);
+}
+
+
 // Initialize remote module
 require('@electron/remote/main').initialize();
 
