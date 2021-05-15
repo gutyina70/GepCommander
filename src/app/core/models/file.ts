@@ -1,4 +1,5 @@
 import { fs, nodeDiskInfo, path } from '../modules';
+import { isLinux, isWindows } from '../utils/cross_platform';
 
 export abstract class FileSystemInfo
 {
@@ -11,7 +12,14 @@ export abstract class FileSystemInfo
 
   public set fullPath(value: string)
   {
-    this._fullPath = value.replace('/', '\\');
+    if(isWindows())
+    {
+      this._fullPath = value.replace('/', path.sep)
+    }
+    else if(isLinux())
+    {
+      this._fullPath = value.replace('\\', path.sep)
+    }
   }
 
   public constructor(fullPath: string)
@@ -19,7 +27,7 @@ export abstract class FileSystemInfo
     this.fullPath = fullPath;
   }
 
-  public get parent(): (DirectoryInfo | null)
+  public get parent(): DirectoryInfo | null
   {
     return new DirectoryInfo(path.dirname(this.fullPath));
   }
@@ -46,23 +54,47 @@ export class FileInfo extends FileSystemInfo
 
 export class DirectoryInfo extends FileSystemInfo
 {
-  public constructor(fullPath: string)
+  public constructor(fullPath: string, format = true)
   {
-    if(fullPath.endsWith(':'))
+    if(format && fullPath != DirectoryInfo.root.fullPath)
     {
-      fullPath += '\\';
+      fullPath = DirectoryInfo.formatPath(fullPath);
     }
     super(fullPath);
+  }
+
+  private static formatPath(fullPath: string): string
+  {
+    fullPath = fullPath.replace('/', '\\');
+    if(isWindows())
+    {
+      if(fullPath.length == 1)
+      {
+        fullPath += ':';
+      }
+    }
+    if(!fullPath.endsWith(path.sep))
+    {
+      fullPath = path.join(fullPath, path.sep);
+    }
+    return fullPath
   }
 
   public get children(): FileSystemInfo[]
   {
     let infos: FileSystemInfo[];
-    if(this.equals(DirectoryInfo.root))
+    if(isWindows())
     {
-      infos = this.getDriveInfos();
+      if(this.equals(DirectoryInfo.root))
+      {
+        infos = this.getDriveInfos();
+      }
+      else
+      {
+        infos = this.getChildrenDirectoryInfos();
+      }
     }
-    else
+    if(isLinux())
     {
       infos = this.getChildrenDirectoryInfos();
     }
@@ -70,15 +102,14 @@ export class DirectoryInfo extends FileSystemInfo
     return infos;
   }
 
-  private getChildrenDirectoryInfos()
+  private getChildrenDirectoryInfos(): FileSystemInfo[]
   {
     const infos: FileSystemInfo[] = [];
     const children = fs.readdirSync(this.fullPath);
     for(const childName of children)
     {
       const childPath = path.join(this.fullPath, childName);
-      const childInfo = this.infoAsFileOrDirectory(childPath);
-
+      const childInfo = this.pathAsFileOrDirectory(childPath);
       if(childInfo)
       {
         infos.push(childInfo);
@@ -87,7 +118,7 @@ export class DirectoryInfo extends FileSystemInfo
     return infos;
   }
 
-  private getDriveInfos()
+  private getDriveInfos(): FileSystemInfo[]
   {
     const infos: FileSystemInfo[] = [];
     const drives = nodeDiskInfo.getDiskInfoSync();
@@ -102,7 +133,7 @@ export class DirectoryInfo extends FileSystemInfo
     return infos;
   }
 
-  private sortItems(items: FileSystemInfo[])
+  private sortItems(items: FileSystemInfo[]): void
   {
     items.sort((a, b) =>
     {
@@ -112,17 +143,17 @@ export class DirectoryInfo extends FileSystemInfo
     });
   }
 
-  private infoAsFileOrDirectory(path: string): (FileInfo | DirectoryInfo | null)
+  private pathAsFileOrDirectory(fullPath: string): FileInfo | DirectoryInfo | null
   {
     try
     {
-      if(fs.lstatSync(path).isDirectory())
+      if(fs.lstatSync(fullPath).isDirectory())
       {
-        return new DirectoryInfo(path);
+        return new DirectoryInfo(fullPath);
       }
       else
       {
-        return new FileInfo(path);
+        return new FileInfo(fullPath);
       }
     }
     catch(error)
@@ -133,13 +164,13 @@ export class DirectoryInfo extends FileSystemInfo
     }
   }
 
-  public get parent(): DirectoryInfo
+  public get parent(): DirectoryInfo | null
   {
     if(this.equals(DirectoryInfo.root))
     {
       return null;
     }
-    if(this.isDriveRoot)
+    if(isWindows() && this.isDriveRoot)
     {
       return DirectoryInfo.root;
     }
@@ -148,25 +179,25 @@ export class DirectoryInfo extends FileSystemInfo
 
   public get name(): string
   {
-    if(this.isDriveRoot)
+    if(isWindows() && this.isDriveRoot)
     {
       return this.drive;
     }
     return path.basename(this.fullPath);
   }
 
-  private get drive()
+  private get drive(): string
   {
     return this.fullPath.split(':')[0];
   }
 
-  private get isDriveRoot()
+  private get isDriveRoot(): boolean
   {
     return this.fullPath.endsWith(':\\');
   }
 
-  private static get root()
+  public static get root(): DirectoryInfo
   {
-    return new DirectoryInfo('\\');
+    return new DirectoryInfo(path.sep, false);
   }
 }

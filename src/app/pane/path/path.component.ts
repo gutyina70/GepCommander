@@ -19,7 +19,7 @@ export class PathComponent
   onInput(): void
   {
     const newPath = this.pathElement.nativeElement.value as string;
-    const newPathAsDirectory = new DirectoryInfo(newPath);
+    const newPathAsDirectory = new DirectoryInfo(newPath, false);
     this.pane.tryGoTo(newPathAsDirectory);
   }
 

@@ -3,9 +3,7 @@ import { BackItem, Item } from "./item/item";
 
 export class Pane
 {
-  private defaultDirectory: DirectoryInfo = new DirectoryInfo('C:/');
-
-  public path: DirectoryInfo = this.defaultDirectory;
+  public path: DirectoryInfo = DirectoryInfo.root;
   public items: Item[] = [];
 
   public get back(): BackItem | null
