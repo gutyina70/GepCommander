@@ -1,5 +1,5 @@
-import { DirectoryInfo, FileSystemInfo } from "../../core/models/file";
-import { childProcess } from "../../core/modules";
+import { DirectoryInfo, FileSystemInfo } from '../../core/models/file';
+import { FileOpener } from '../../core/utils/file_opener';
 
 export class Item
 {
@@ -25,7 +25,7 @@ export class Item
 
   public startProcess(): void
   {
-    childProcess.exec(`start "" "${this.info.fullPath}"`);
+    new FileOpener(this.info).startProcess();
   }
 }
 

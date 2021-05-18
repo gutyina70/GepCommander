@@ -15,5 +15,6 @@
 	"typescript.format.placeOpenBraceOnNewLineForFunctions": true,
 	"js/ts.implicitProjectConfig.experimentalDecorators": true,
 	"editor.tabSize": 2,
-	"editor.insertSpaces": true
+	"editor.insertSpaces": true,
+	"typescript.preferences.quoteStyle": "single"
 }
