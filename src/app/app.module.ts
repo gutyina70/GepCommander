@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
-import { ItemComponent } from './pane/item/item.component';
+import { ItemComponent } from './pane/items-container/item/item.component';
+import { ItemsContainerComponent } from './pane/items-container/items-container.component';
 import { PaneComponent } from './pane/pane.component';
 import { PathComponent } from './pane/path/path.component';
 import { SearchComponent } from './pane/search/search.component';
@@ -19,7 +20,8 @@ import { SharedModule } from './shared/shared.module';
     PaneComponent,
     PathComponent,
     ItemComponent,
-    SearchComponent
+    SearchComponent,
+    ItemsContainerComponent
   ],
   imports: [
     BrowserModule,

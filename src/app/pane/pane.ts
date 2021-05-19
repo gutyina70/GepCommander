@@ -1,5 +1,5 @@
 import { DirectoryInfo } from '../core/models/file';
-import { BackItem, Item } from './item/item';
+import { BackItem, Item } from './items-container/item/item';
 
 export class Pane
 {

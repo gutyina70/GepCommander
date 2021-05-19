@@ -1,5 +1,5 @@
 import { Component, HostListener, Input } from '@angular/core';
-import { Pane } from '../pane';
+import { Pane } from '../../pane';
 import { Item } from './item';
 
 @Component({
