@@ -1,8 +1,8 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { KeyboardEventHandler } from '../../core/utils/keyboard_event_handler';
+import { DirectoryInfo } from '../../../core/models/file';
+import { KeyboardEventHandler } from '../../../core/utils/keyboard_event_handler';
 import { Pane } from '../pane';
-import { DirectoryInfo } from './../../core/models/file';
-import { PaneComponent } from './../pane.component';
+import { PaneComponent } from '../pane.component';
 
 @Component({
   selector: 'app-pane-path',

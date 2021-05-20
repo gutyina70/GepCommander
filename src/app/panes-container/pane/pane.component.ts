@@ -13,6 +13,7 @@ export class PaneComponent
   pane = new Pane();
 
   @Input() tabindex: number;
+  @Input() otherPane: PaneComponent;
 
   @ViewChild('paneContainer') paneContainer: ElementRef;
   @ViewChild(PathComponent) pathComponent: PathComponent;

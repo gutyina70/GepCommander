@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { KeyboardEventHandler } from '../../core/utils/keyboard_event_handler';
+import { KeyboardEventHandler } from '../../../core/utils/keyboard_event_handler';
 import { Pane } from '../pane';
-import { PaneComponent } from './../pane.component';
+import { PaneComponent } from '../pane.component';
 
 @Component({
   selector: 'app-pane-search',

@@ -1,5 +1,5 @@
-import { DirectoryInfo, FileSystemInfo } from '../../../core/models/file';
-import { FileOpener } from '../../../core/utils/file_opener';
+import { DirectoryInfo, FileSystemInfo } from '../../../../core/models/file';
+import { FileOpener } from '../../../../core/utils/file_opener';
 
 export class Item
 {
