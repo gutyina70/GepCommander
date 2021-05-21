@@ -1,7 +1,7 @@
 <div #paneContainer tabindex="{{ tabindex }}">
 	<app-pane-path #path [paneComponent]="this" [pane]="pane">
 	</app-pane-path>
-	<app-pane-items-container [items]="pane.shownItems" [pane]="pane">
+	<app-pane-items-container [paneComponent]="this" [items]="pane.shownItems" [pane]="pane">
 	</app-pane-items-container>
 	<app-pane-search #search [paneComponent]="this" [pane]="pane">
 	</app-pane-search>

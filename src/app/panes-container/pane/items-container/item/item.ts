@@ -6,6 +6,7 @@ export class Item
   public shown = true;
   public selected = false;
   public marked = false;
+  public renaming = false;
 
   public info: FileSystemInfo;
   public get displayName(): string

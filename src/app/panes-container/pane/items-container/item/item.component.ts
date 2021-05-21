@@ -1,5 +1,6 @@
 import { Component, HostListener, Input } from '@angular/core';
 import { Pane } from '../../pane';
+import { PaneComponent } from '../../pane.component';
 import { Item } from './item';
 
 @Component({
@@ -11,6 +12,7 @@ export class ItemComponent
 {
   @Input() item: Item;
   @Input() pane: Pane;
+  @Input() paneComponent: PaneComponent;
 
   @HostListener('click', ['$event'])
   onClick(event: MouseEvent): boolean

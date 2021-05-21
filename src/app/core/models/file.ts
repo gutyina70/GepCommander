@@ -46,10 +46,22 @@ export abstract class FileSystemInfo
   {
     return this.fullPath === other.fullPath;
   }
+
+  public abstract rename(newName: string): void
+
+  public move(newInfo: FileSystemInfo): void
+  {
+    fs.renameSync(this.fullPath, newInfo.fullPath);
+  }
 }
 
 export class FileInfo extends FileSystemInfo
 {
+  public rename(newName: string): void
+  {
+    const newPath = new FileInfo(path.join(this.parent.fullPath, newName));
+    this.move(newPath);
+  }
 }
 
 export class DirectoryInfo extends FileSystemInfo
@@ -199,5 +211,11 @@ export class DirectoryInfo extends FileSystemInfo
   public static get root(): DirectoryInfo
   {
     return new DirectoryInfo(path.sep, false);
+  }
+
+  public rename(newName: string): void
+  {
+    const newPath = new DirectoryInfo(path.join(this.parent.fullPath, newName));
+    this.move(newPath);
   }
 }

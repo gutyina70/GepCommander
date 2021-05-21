@@ -48,6 +48,11 @@ export class Pane
     }
   }
 
+  public refresh(): void
+  {
+    this.goTo(this.path);
+  }
+
   public goTo(path: DirectoryInfo): void
   {
     this.path = path;

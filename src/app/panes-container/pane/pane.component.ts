@@ -41,6 +41,7 @@ export class PaneComponent
     else
     {
       if(this.handleNavigation(event)) return true;
+      if(this.handleFileOperations(event)) return true;
       this.searchComponent.focus(); return true;
     }
     return false;
@@ -101,6 +102,16 @@ export class PaneComponent
         return true;
       case 'Backspace':
         this.pane.goBack();
+        return true;
+    }
+    return false;
+  }
+  private handleFileOperations(event: KeyboardEvent): boolean
+  {
+    switch(event.code)
+    {
+      case 'F2':
+        this.pane.selectedItem.renaming = true;
         return true;
     }
     return false;

@@ -11,6 +11,7 @@ import { PathComponent } from './panes-container/pane/path/path.component';
 import { SearchComponent } from './panes-container/pane/search/search.component';
 import { PanesContainerComponent } from './panes-container/panes-container.component';
 import { SharedModule } from './shared/shared.module';
+import { RenameComponent } from './panes-container/pane/items-container/item/rename/rename.component';
 
 
 
@@ -23,7 +24,8 @@ import { SharedModule } from './shared/shared.module';
     ItemComponent,
     SearchComponent,
     ItemsContainerComponent,
-    PanesContainerComponent
+    PanesContainerComponent,
+    RenameComponent
   ],
   imports: [
     BrowserModule,

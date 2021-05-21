@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Pane } from '../pane';
+import { PaneComponent } from '../pane.component';
 import { Item } from './item/item';
 
 @Component({
@@ -11,4 +12,5 @@ export class ItemsContainerComponent
 {
   @Input() items: Item[];
   @Input() pane: Pane;
+  @Input() paneComponent: PaneComponent;
 }
