@@ -123,6 +123,10 @@ export class PaneComponent
         this.pane.refresh();
         this.otherPane.pane.refresh();
         return true;
+      case 'Delete':
+        this.delete();
+        this.pane.refresh();
+        return true;
     }
     return false;
   }
@@ -135,6 +139,11 @@ export class PaneComponent
   private move(): void
   {
     this.pane.selectedItem.info.moveTo(this.otherPane.pane.path);
+  }
+
+  private delete(): void
+  {
+    this.pane.selectedItem.info.delete();
   }
 
   public focus(): void

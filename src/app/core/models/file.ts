@@ -62,6 +62,11 @@ export abstract class FileSystemInfo
   {
     fs.copyFileSync(this.fullPath, newInfo.fullPath);
   }
+
+  public delete(): void
+  {
+    fs.unlinkSync(this.fullPath);
+  }
 }
 
 export class FileInfo extends FileSystemInfo
