@@ -56,9 +56,10 @@ export abstract class FileSystemInfo
 
   public abstract copyTo(newInfo: FileSystemInfo): void
 
+  public abstract moveTo(newInfo: FileSystemInfo): void
+
   public copyFile(newInfo: FileSystemInfo): void
   {
-    console.log(this.fullPath, newInfo.fullPath);
     fs.copyFileSync(this.fullPath, newInfo.fullPath);
   }
 }
@@ -75,6 +76,12 @@ export class FileInfo extends FileSystemInfo
   {
     const newPath = new FileInfo(path.join(toFolder.fullPath, this.name));
     this.copyFile(newPath);
+  }
+
+  public moveTo(toFolder: DirectoryInfo): void
+  {
+    const newPath = new FileInfo(path.join(toFolder.fullPath, this.name));
+    this.move(newPath);
   }
 }
 
@@ -241,5 +248,11 @@ export class DirectoryInfo extends FileSystemInfo
     {
       info.copyTo(newPath);
     }
+  }
+
+  public moveTo(toFolder: DirectoryInfo): void
+  {
+    const newPath = new DirectoryInfo(path.join(toFolder.fullPath, this.name));
+    this.move(newPath);
   }
 }

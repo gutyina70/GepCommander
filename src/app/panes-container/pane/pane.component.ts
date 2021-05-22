@@ -118,6 +118,11 @@ export class PaneComponent
         this.pane.refresh();
         this.otherPane.pane.refresh();
         return true;
+      case 'F6':
+        this.move();
+        this.pane.refresh();
+        this.otherPane.pane.refresh();
+        return true;
     }
     return false;
   }
@@ -125,6 +130,11 @@ export class PaneComponent
   private copy(): void
   {
     this.pane.selectedItem.info.copyTo(this.otherPane.pane.path);
+  }
+
+  private move(): void
+  {
+    this.pane.selectedItem.info.moveTo(this.otherPane.pane.path);
   }
 
   public focus(): void
