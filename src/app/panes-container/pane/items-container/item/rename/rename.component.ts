@@ -43,6 +43,7 @@ export class RenameComponent implements AfterViewInit
           return true;
         case 'Enter':
           this.item.renaming = false;
+          this.focusParent();
           this.rename();
           this.pane.refresh();
           return true;

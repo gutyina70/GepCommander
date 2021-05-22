@@ -113,8 +113,18 @@ export class PaneComponent
       case 'F2':
         this.pane.selectedItem.renaming = true;
         return true;
+      case 'F5':
+        this.copy();
+        this.pane.refresh();
+        this.otherPane.pane.refresh();
+        return true;
     }
     return false;
+  }
+
+  private copy(): void
+  {
+    this.pane.selectedItem.info.copyTo(this.otherPane.pane.path);
   }
 
   public focus(): void
