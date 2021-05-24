@@ -30,7 +30,7 @@
     ]
   },
   "portable": {
-    "splashImage": "dist/assets/icons/electron.bmp"
+    "splashImage": "dist/assets/icons/favicon.png"
   },
   "linux": {
     "icon": "dist/assets/icons",
