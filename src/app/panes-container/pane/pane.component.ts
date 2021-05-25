@@ -133,17 +133,47 @@ export class PaneComponent
 
   private copy(): void
   {
-    this.pane.selectedItem.info.copyTo(this.otherPane.pane.path);
+    if(this.pane.markedItems.length)
+    {
+      for(const item of this.pane.markedItems)
+      {
+        item.info.copyTo(this.otherPane.pane.path);
+      }
+    }
+    else
+    {
+      this.pane.selectedItem.info.copyTo(this.otherPane.pane.path);
+    }
   }
 
   private move(): void
   {
-    this.pane.selectedItem.info.moveTo(this.otherPane.pane.path);
+    if(this.pane.markedItems.length)
+    {
+      for(const item of this.pane.markedItems)
+      {
+        item.info.moveTo(this.otherPane.pane.path);
+      }
+    }
+    else
+    {
+      this.pane.selectedItem.info.moveTo(this.otherPane.pane.path);
+    }
   }
 
   private delete(): void
   {
-    this.pane.selectedItem.info.delete();
+    if(this.pane.markedItems.length)
+    {
+      for(const item of this.pane.markedItems)
+      {
+        item.info.delete();
+      }
+    }
+    else
+    {
+      this.pane.selectedItem.info.delete();
+    }
   }
 
   public focus(): void

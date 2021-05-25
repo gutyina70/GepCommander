@@ -20,6 +20,11 @@ export class Pane
     return this.items.filter(item => item.shown);
   }
 
+  public get markedItems(): Item[]
+  {
+    return this.items.filter(item => item.marked);
+  }
+
   public get selectedItem(): Item | null
   {
     const selecteds = this.items.filter(item => item.selected);
