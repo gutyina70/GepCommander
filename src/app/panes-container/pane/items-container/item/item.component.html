@@ -1,8 +1,0 @@
-<div [class.selected]="item.selected" [class.marked]="item.marked">
-	<img class="icon" src="assets/item/{{ item.icon }}.png">
-	<div *ngIf="item.renaming; then renameState else normalState"></div>
-	<ng-template #renameState>
-		<app-pane-item-rename [item]="item" [pane]="pane" [paneComponent]="paneComponent"></app-pane-item-rename>
-	</ng-template>
-	<ng-template #normalState>{{ item.displayName }}</ng-template>
-</div>
