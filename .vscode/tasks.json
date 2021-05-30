@@ -6,12 +6,14 @@
       "command": "/usr/bin/g++",
       "args": [
         "-g",
-        "src/main.cpp",
+        "src/*.cpp",
+        "-o",
+        "build/debug/gepcommander-linux",
+        "-I",
+        "include",
         "`wx-config",
         "--cxxflags",
         "--libs`",
-        "-o",
-        "build/debug/gepcommander-linux"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -19,9 +21,26 @@
       "problemMatcher": [
         "$gcc"
       ],
+      "presentation": {
+        "clear": true
+      },
       "group": {
         "kind": "build",
         "isDefault": true
+      }
+    },
+    {
+      "label": "Cleanup",
+      "type": "shell",
+      "linux": {
+        "command": "rm -rf build/debug/** build/release/**"
+      },
+      "windows": {
+        "command": "del /S build/debug/** build/release/**"
+      },
+      "presentation": {
+        "reveal": "silent",
+        "clear": true
       },
     }
   ],

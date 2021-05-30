@@ -23,6 +23,7 @@
         }
       ],
       "preLaunchTask": "Debug (linux)",
+      "postDebugTask": "Cleanup",
       "miDebuggerPath": "/usr/bin/gdb"
     }
   ]
