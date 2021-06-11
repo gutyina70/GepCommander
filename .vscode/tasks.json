@@ -30,14 +30,50 @@
       }
     },
     {
+      "type": "cppbuild",
+      "label": "Debug (windows)",
+      "command": "g++.exe",
+      "args": [
+        "-g",
+        "src\\\\*.cpp",
+        "-o",
+        "build\\\\debug\\\\gepcommander-windows",
+        "-I",
+        "include",
+        "-I",
+        "${WXWIN}\\include\\wx-3.1",
+        "-I",
+        "${WXWIN}\\lib\\wx\\include\\msw-unicode-3.1",
+        "-L",
+        "${WXWIN}\\lib",
+        "-l",
+        "wx_mswud_core-3.1.dll",
+        "-l",
+        "wx_baseud-3.1.dll",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "clear": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
       "label": "Cleanup",
       "type": "shell",
       "linux": {
         "command": "rm -rf build/debug/** build/release/**"
       },
-      "windows": {
-        "command": "del /S build/debug/** build/release/**"
-      },
+      // "windows": {
+      //   "command": "del /S build\\debug\\* build\\release\\*"
+      // },
       "presentation": {
         "reveal": "silent",
         "clear": true
