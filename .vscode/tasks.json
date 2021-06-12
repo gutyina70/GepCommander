@@ -8,7 +8,7 @@
         "-g",
         "src/*.cpp",
         "-o",
-        "build/debug/gepcommander-linux",
+        "build/debug/gepcommander",
         "-I",
         "include",
         "`wx-config",
@@ -35,9 +35,9 @@
       "command": "g++.exe",
       "args": [
         "-g",
-        "src\\\\*.cpp",
+        "src\\*.cpp",
         "-o",
-        "build\\\\debug\\\\gepcommander-windows",
+        "build\\debug\\gepcommander",
         "-I",
         "include",
         "-I",
@@ -69,11 +69,11 @@
       "label": "Cleanup",
       "type": "shell",
       "linux": {
-        "command": "rm -rf build/debug/** build/release/**"
+        "command": "rm build/debug/gepcommander build/release/gepcommander"
       },
-      // "windows": {
-      //   "command": "del /S build\\debug\\* build\\release\\*"
-      // },
+      "windows": {
+        "command": "del build\\debug\\gepcommander.exe; del build\\release\\gepcommander.exe"
+      },
       "presentation": {
         "reveal": "silent",
         "clear": true
