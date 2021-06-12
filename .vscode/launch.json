@@ -47,6 +47,28 @@
       "preLaunchTask": "Debug (windows)",
       "postDebugTask": "Cleanup",
       "miDebuggerPath": "gdb"
+    },
+    {
+      "name": "Release (windows)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/release/gepcommander.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "Release (windows)",
+      "postDebugTask": "Cleanup",
+      "miDebuggerPath": "gdb"
     }
   ]
 }
