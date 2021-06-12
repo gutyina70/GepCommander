@@ -13,7 +13,8 @@
         "include",
         "`wx-config",
         "--cxxflags",
-        "--libs`",
+        "--libs",
+        "--debug=yes`",
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -50,6 +51,35 @@
         "wx_mswud_core-3.1.dll",
         "-l",
         "wx_baseud-3.1.dll",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "clear": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "cppbuild",
+      "label": "Release (linux)",
+      "command": "/usr/bin/g++",
+      "args": [
+        "src/*.cpp",
+        "-o",
+        "build/release/gepcommander",
+        "-I",
+        "include",
+        "`wx-config",
+        "--cxxflags",
+        "--libs",
+        "--debug=no`",
       ],
       "options": {
         "cwd": "${workspaceFolder}"
