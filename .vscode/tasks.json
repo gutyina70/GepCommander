@@ -5,6 +5,7 @@
       "label": "Debug (linux)",
       "command": "/usr/bin/g++",
       "args": [
+        "-std=c++17",
         "-g",
         "src/*.cpp",
         "-o",
@@ -35,6 +36,7 @@
       "label": "Debug (windows)",
       "command": "g++.exe",
       "args": [
+        "-std=c++17",
         "-g",
         "src\\*.cpp",
         "-o",
@@ -71,6 +73,7 @@
       "label": "Release (linux)",
       "command": "/usr/bin/g++",
       "args": [
+        "-std=c++17",
         "src/*.cpp",
         "-o",
         "build/release/gepcommander",
@@ -100,6 +103,7 @@
       "label": "Release (windows)",
       "command": "g++.exe",
       "args": [
+        "-std=c++17",
         "src\\*.cpp",
         "-o",
         "build\\release\\gepcommander",
